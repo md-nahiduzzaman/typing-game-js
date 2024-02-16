@@ -9,13 +9,35 @@ function handleKeyboardButtonPress(event) {
     console.log("right");
     removeBgColorById(expectedAlphabet);
 
+    const currentScore = getTextElementValueById("current-score");
+    const updateScore = currentScore + 1;
+    setTextElementById("current-score", updateScore);
+
     continueGame();
   } else {
-    console.log("wrong");
+    const currentLife = getTextElementValueById("current-life");
+    const updateLife = currentLife - 1;
+    setTextElementById("current-life", updateLife);
+
+    if (updateLife === 0) {
+      gameOver();
+    }
   }
 }
 
 document.addEventListener("keyup", handleKeyboardButtonPress);
+
+function gameOver() {
+  hideElementById("home-screen");
+  hideElementById("play-ground");
+  showElementById("final-score");
+
+  const lastScore = getTextElementValueById("current-score");
+  setTextElementById("last-score", lastScore);
+
+  const currentAlphabet = getElementTextById("current-alphabet");
+  removeBgColorById(currentAlphabet);
+}
 
 function continueGame() {
   const alphabet = getRandomAlphabet();
@@ -30,6 +52,9 @@ function play() {
   hideElementById("home-screen");
   showElementById("play-ground");
   hideElementById("final-score");
+
+  setTextElementById("current-life", 5);
+  setTextElementById("current-score", 0);
 
   continueGame();
 }
